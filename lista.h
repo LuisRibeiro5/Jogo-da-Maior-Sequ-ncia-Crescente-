@@ -41,6 +41,31 @@ bool ehVazia(Lista<T> &lista){
 }
 
 template<typename T>
+int numeroDeElementos(Lista<T>& lista){
+    return lista.cardinalidade;
+}
+
+template<typename T>
+bool existeElemento(Lista<T> &lista, T elem){
+    Nodo<T> *atual = lista.inicio;
+    while (atual)
+    {
+        if (atual->valor == elem)
+            return true;
+        
+        atual = atual->proximo;
+    }
+    return false;
+}
+
+template<typename T>
+bool existePosicao(Lista<T>&lista, int pos){
+    return ((pos > 0) && (pos < lista.cardinalidade + 1));
+}
+
+
+
+template<typename T>
 T retornaElemento(Lista<T> &lista, int pos){
     if (pos < 1 || pos > lista.cardinalidade)
     {
@@ -57,19 +82,24 @@ T retornaElemento(Lista<T> &lista, int pos){
 }
 
 template<typename T>
-Nodo<T> *retornaNodo(Lista<T> &lista, int pos){
-    if (pos < 1 || pos > lista.cardinalidade)
+int retornaPosicao(Lista<T>& lista, T elem){
+    if (!existeElemento(lista, elem))
     {
-        throw "POSICAO INVALIDA";
+        throw "ELEMENTO NAO EXISTE NA LISTA.";
     }
-    Nodo<T> *aux = lista.inicio;
+    
 
-    for (int i = 1; i < pos; i++)
+    Nodo<T> *atual = lista.inicio;
+    int cont = 1;
+    while (atual)
     {
-        aux = aux->proximo;
+        if (atual->valor == elem)
+            return cont;
+        
+        atual = atual->proximo;
+        cont++;
     }
-
-    return aux;    
+    
 }
 
 template<typename T>
@@ -85,17 +115,6 @@ bool temElemento(Lista<T> &lista, T elem){
         aux = aux->proximo;
     }
     return false;
-}
-
-template<typename T>
-void trocarPosicao(Lista<T> &lista, int posCarta1, int posCarta2){
-    Nodo<T> *carta1 = retornaNodo(lista, posCarta1);
-    Nodo<T> *carta2 = retornaNodo(lista, posCarta2);
-
-    T aux;
-    aux = carta1->valor;
-    carta1->valor = carta2->valor;
-    carta2->valor = aux;
 }
 
 template<typename T>
