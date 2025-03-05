@@ -17,6 +17,9 @@ void descartarCarta(Lista<T> &);
 template <typename T>
 void trocarPosicao(Lista<T> &);
 
+template<typename T>
+int retornaSeqCrescente(Lista<T> &);
+
 int main()
 {
     Lista<int> player[2], baralho[2];
@@ -37,6 +40,8 @@ int main()
     {
         for (int j = 0; j < 2; j++)
         {
+            cout << "/nVez do Jogador " << i + 1;
+
             menu();
             do
             {
@@ -66,7 +71,16 @@ int main()
     }
 
     // verificar ganhador
+    int seqPlayer1, seqPlayer2;
+    seqPlayer1 = retornaSeqCrescente(player[0]);
+    seqPlayer2 = retornaSeqCrescente(player[1]);
 
+    if (seqPlayer1 > seqPlayer2) {
+        cout << "/nVencedor é o jogador 1 sequencia de " << seqPlayer1 << " numeros.";
+    }else{
+        cout << "/nVencedor é o jogador 2 sequencia de " << seqPlayer2 << " numeros.";
+    }
+    
     for (int i = 0; i < 2; i++)
     {
         destroi(player[i]);
@@ -188,4 +202,26 @@ void trocarPosicao(Lista<T> &player)
     carta2->valor = vCarta1;
 
     cout << "/nTroca cartas " << vCarta1 << " e " << vCarta2;
+};
+
+
+template<typename T>
+int retornaSeqCrescente(Lista<T> & player){
+    Nodo<T> *atual = player.inicio;
+    int maiorSeq, seqAtual = 1;
+
+    while (atual)
+    {
+        if (atual->valor + 1 == atual->proximo)
+        {
+            seqAtual++;
+        }else{
+            maiorSeq = seqAtual;
+            seqAtual = 1;
+        }
+        
+        atual = atual->proximo;
+    }
+    
+    return maiorSeq;
 };
