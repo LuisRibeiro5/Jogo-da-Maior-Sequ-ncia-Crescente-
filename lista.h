@@ -10,10 +10,11 @@ struct Nodo
 };
 
 template<typename T>
-struct Lista
-{
+struct Lista {
     int cardinalidade;
-    Nodo<T> *inicio;
+    Nodo<T>* inicio;
+
+    Lista() : cardinalidade(0), inicio(nullptr) {}
 };
 
 template<typename T>
@@ -23,15 +24,13 @@ void cria(Lista<T> &lista){
 
 template<typename T>
 void destroi(Lista<T> &lista){
-    Nodo<T> *aux;
-    for (int i = 1; i <= lista.cardinalidade; i++)
-    {
-        aux = lista.inicio;
-        if (lista.inicio->proximo)
-            lista.inicio = lista.inicio->proximo;
-        
+    Nodo<T> *aux = lista.inicio;
+    while (aux) {
+        Nodo<T> *prox = aux->proximo;
         delete aux;
+        aux = prox;
     }
+    lista.inicio = nullptr;
     lista.cardinalidade = 0;
 }
 
@@ -156,31 +155,35 @@ void insere(Lista<T> &lista, T elem, int pos){
 }
 
 template<typename T>
-void retira(Lista<T> &lista, int pos){
-    if (ehVazia(lista))
-    {
-        throw "UNDERFLOW";
+void retira(Lista<T> &lista, int pos) {
+    if (ehVazia(lista)) {
+        throw "UNDERFLOW"; 
     }
-    if (pos < 1 || pos > lista.cardinalidade)
-    {
-        throw "POSICAO INVALIDA";
+    if (pos < 1 || pos > lista.cardinalidade) {
+        throw "POSICAO INVALIDA"; 
     }
 
     Nodo<T> *atual = lista.inicio;
-    
-    if (pos == 1)
-    {
+
+    if (pos == 1) {
         lista.inicio = lista.inicio->proximo;
         if (lista.inicio) lista.inicio->anterior = nullptr;
-    }else {
-        for (int i = 1; i < pos; i++)
-        {
+    } else {
+        
+        for (int i = 1; i < pos; i++) {
             atual = atual->proximo;
         }
-        atual->anterior->proximo = atual->proximo;
-        if (atual->proximo) atual->proximo->anterior = atual->anterior;
+
+        if (atual->proximo == nullptr) {
+            atual->anterior->proximo = nullptr; 
+        } else {
+            
+            atual->anterior->proximo = atual->proximo;
+            atual->proximo->anterior = atual->anterior;
+        }
     }
-    delete atual;
+
+    delete atual; 
     lista.cardinalidade--;
 }
 
