@@ -184,18 +184,4 @@ void retira(Lista<T> &lista, int pos){
     lista.cardinalidade--;
 }
 
-template<typename T>
-void mostra(Lista<T> &lista){
-    Nodo<T> *aux = lista.inicio;
-    std::cout << "[";
-    while (aux)
-    {
-        std::cout << " " << aux->valor;
-        (aux->proximo) ? std::cout << "," : std::cout << " ";
-        aux = aux->proximo;
-        
-    }
-    std::cout << "]";
-}
-
 #endif
