@@ -13,24 +13,31 @@ int main()
 
     int rodadas = get_rodadas();
 
-    cout << "/nDistribuicao Inicial: ";
-    cout << "/nJogador 1 - ";
+    cout << "\nDistribuicao Inicial: ";
+    cout << "\nJogador 1 - ";
     mostraBaralho(player[0]);
-    cout << "/nJogador 2 - ";
+    cout << "\nJogador 2 - ";
     mostraBaralho(player[1]);
+    cout << "\n-------------------------\n";
 
     int opcao;
     for (int i = 0; i < rodadas; i++)
     {
-        cout << "/nRodada " << i + 1;
-
+        cout << "\nRODADA " << i + 1;
+        cout << "\nJogador 1 - ";
+        mostraBaralho(player[0]);
+        cout << "\nJogador 2 - ";
+        mostraBaralho(player[1]);
+        cout << "\n---------------------";
+        
         for (int j = 0; j < 2; j++)
         {
-            cout << "/nVez do Jogador " << i + 1;
+            cout << "\nVez do Jogador " << j + 1 << "\n";
 
             menu();
             do
             {
+                cout << "\nopcao:";
                 cin >> opcao;
                 if (opcao < 1 || opcao > 3)
                     cout << "Opcao invalida";
@@ -41,7 +48,7 @@ int main()
             int k;
             (!ehVazia(baralho[0])) ? k = 0 : k = 1;
 
-            cout << "/nJogador " << i + 1 << " escolhe ";
+            cout << "\nJogador " << i + 1 << " escolhe ";
             switch (opcao)
             {
             case 1:
@@ -57,6 +64,8 @@ int main()
                 trocarPosicao(player[j]);
                 break;
             }
+            mostraBaralho(player[0]);
+
         }
     }
 

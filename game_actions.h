@@ -20,10 +20,23 @@ void inicializaBaralhos(Lista<T> *player, Lista<T> *baralho, int size = 2)
         insere(baralho[1], i, numeroDeElementos(baralho[1]) + 1);
     }
 
+    srand(time(NULL));
     for (int i = 0; i < 5; i++)
     {
-        comprarCarta(player[0], baralho[0]);
-        comprarCarta(player[1], baralho[0]);
+        for (int j = 0; j < 2; j++)
+        {
+            int cartaPos, cartaValor;
+            do
+            {  
+                cartaPos = rand() % numeroDeElementos(baralho[0]) + 1;
+                cartaValor = retornaElemento(baralho[0], cartaPos);
+
+            } while (existeElemento(player[j], cartaValor));
+            
+            insere(player[j], cartaValor, numeroDeElementos(player[j]) + 1);
+            retira(baralho[0], cartaPos);
+        }
+    
     }
 };
 
@@ -32,7 +45,7 @@ int get_rodadas()
     int rodadas;
     do
     {
-        cout << "/n digite o numero de rodadas a ser jogado (maximo 100):";
+        cout << "\n digite o numero de rodadas a ser jogado (maximo 100):";
         cin >> rodadas;
     } while (rodadas < 1 || rodadas > 100);
     return rodadas;
@@ -41,9 +54,9 @@ int get_rodadas()
 void menu()
 {
     cout << "Escolha sua jogada:";
-    cout << "/nOpcao 1 : Comprar nova carta.";
-    cout << "/nOpcao 2 : Descartar uma carta.";
-    cout << "/nOpcao 3 : Trocar posicao de duas cartas.";
+    cout << "\nOpcao 1 : Comprar nova carta.";
+    cout << "\nOpcao 2 : Descartar uma carta.";
+    cout << "\nOpcao 3 : Trocar posicao de duas cartas.";
 };
 
 template <typename T>
@@ -55,23 +68,23 @@ void comprarCarta(Lista<T> &player, Lista<T> &baralho)
     do
     {
 
-        cartaPos = rand() % numeroDeElementos(baralho);
+        cartaPos = rand() % numeroDeElementos(baralho) + 1;
         cartaValor = retornaElemento(baralho, cartaPos);
 
     } while (existeElemento(player, cartaValor));
 
     retira(baralho, cartaPos);
 
-    cout << "/nDigite qual a posicao do baralho que deseja inserir a carta comprada:";
+    cout << "\nDigite qual a posicao do baralho que deseja inserir a carta comprada:";
     do
     {
-        cout << "/nPosicao deve ser de 1 à " << numeroDeElementos(player) + 1;
+        cout << "\nPosicao deve ser de 1 à " << numeroDeElementos(player) + 1;
         cin >> baralhoPos;
     } while (baralhoPos < 1 || baralhoPos > numeroDeElementos(player) + 1);
 
     insere(player, cartaValor, baralhoPos);
 
-    cout << "/nCarta sorteada " << cartaValor << " inserida na posição " << baralhoPos;
+    cout << "\nCarta " << cartaValor << " sorteada, inserida na posição " << baralhoPos;
 };
 
 template <typename T>
@@ -80,33 +93,35 @@ void descartarCarta(Lista<T> &player)
     int cartaPos;
     do
     {
-        cout << "/nPosicao a ser excluida deve ser uma de 1 à " << player.cardinalidade;
+        cout << "\nPosicao a ser excluida deve ser uma de 1 à " << player.cardinalidade;
         cin >> cartaPos;
 
     } while (!existePosicao(player, cartaPos));
 
-    retira(player, cartaPos);
+    cout << "\nCarta " << retornaElemento(player, cartaPos) << " removida.";
 
-    cout << "/nCarta " << retornaElemento(player, cartaPos) << " removida.";
+    retira(player, cartaPos);
 };
 template <typename T>
 void trocarPosicao(Lista<T> &player)
 {
     int vCarta1, vCarta2;
-    cout << "/nDigite o valor das cartas que deseja trocar de posição:";
+    cout << "\nDigite a posicao das cartas que deseja trocar de posição:";
     do
     {
-        cout << "/nPosicao a ser escolhida deve ser uma de 1 à " << player.cardinalidade;
-        cout << "/nCarta 1:";
+        cout << "\nPosicao a ser escolhida deve ser uma de 1 à " << player.cardinalidade;
+        cout << "\nCarta 1:";
         cin >> vCarta1;
+        vCarta1 = retornaElemento(player, vCarta1);
 
     } while (!existeElemento(player, vCarta1));
 
     do
     {
-        cout << "/nPosicao a ser escolhida deve ser uma de 1 à " << player.cardinalidade;
-        cout << "/nCarta 2:";
+        cout << "\nPosicao a ser escolhida deve ser uma de 1 à " << player.cardinalidade;
+        cout << "\nCarta 2:";
         cin >> vCarta2;
+        vCarta2 = retornaElemento(player, vCarta2);
 
     } while (!existeElemento(player, vCarta2));
 
@@ -126,24 +141,26 @@ void trocarPosicao(Lista<T> &player)
     carta1->valor = vCarta2;
     carta2->valor = vCarta1;
 
-    cout << "/nCartas " << vCarta1 << " e " << vCarta2 << " foram trocadas de posição";
+    cout << "\nCartas " << vCarta1 << " e " << vCarta2 << " foram trocadas de posição";
 };
 
 template <typename T>
 int retornaSeqCrescente(Lista<T> &player)
 {
     Nodo<T> *atual = player.inicio;
-    int maiorSeq, seqAtual = 1;
+    int maiorSeq = 1, seqAtual = 1;
 
-    while (atual)
+    while (atual->proximo)
     {
         if ((atual->valor + 1) == atual->proximo->valor)
         {
             seqAtual++;
+
+            if (seqAtual > maiorSeq) maiorSeq = seqAtual;
+            
         }
         else
         {
-            maiorSeq = seqAtual;
             seqAtual = 1;
         }
 
@@ -160,13 +177,17 @@ void ganhador(Lista<T> &player1, Lista<T> &player2)
     seqPlayer1 = retornaSeqCrescente(player1);
     seqPlayer2 = retornaSeqCrescente(player2);
 
-    if (seqPlayer1 > seqPlayer2)
+    if (seqPlayer1 == seqPlayer2)
     {
-        cout << "/nVencedor é o jogador 1 sequencia de " << seqPlayer1 << " numeros.";
+        cout << "\nEmpate!!";
+
+    }else if (seqPlayer1 > seqPlayer2)
+    {
+        cout << "\nVencedor é o jogador 1 sequencia de " << seqPlayer1 << " numeros.";
     }
     else
     {
-        cout << "/nVencedor é o jogador 2 sequencia de " << seqPlayer2 << " numeros.";
+        cout << "\nVencedor é o jogador 2 sequencia de " << seqPlayer2 << " numeros.";
     }
 }
 

@@ -19,6 +19,7 @@ struct Lista
 template<typename T>
 void cria(Lista<T> &lista){
     lista.cardinalidade = 0;
+    lista.inicio = nullptr;
 }
 
 template<typename T>
