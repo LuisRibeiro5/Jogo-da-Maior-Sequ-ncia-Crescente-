@@ -9,6 +9,8 @@ int main()
 {
     Lista<int> player[2], baralho[2];
 
+    cout << "BEM VINDO AO JOGO DA MAIOR SEQ. CRESCENTE.\n------------------------";
+
     inicializaBaralhos(player, baralho);
 
     int rodadas = get_rodadas();
@@ -18,12 +20,12 @@ int main()
     mostraBaralho(player[0]);
     cout << "\nJogador 2 - ";
     mostraBaralho(player[1]);
-    cout << "\n-------------------------\n";
+    cout << "\n-------------------------------------------\n";
 
     int opcao;
     for (int i = 0; i < rodadas; i++)
     {
-        cout << "\nRODADA " << i + 1;
+        cout << "\nRODADA " << i + 1 << "/" << rodadas;
         cout << "\nJogador 1 - ";
         mostraBaralho(player[0]);
         cout << "\nJogador 2 - ";
@@ -33,6 +35,7 @@ int main()
         for (int j = 0; j < 2; j++)
         {
             cout << "\nVez do Jogador " << j + 1 << "\n";
+            mostraBaralho(player[j]); cout << "\n\n";
 
             menu();
             do
@@ -48,7 +51,7 @@ int main()
             int k;
             (!ehVazia(baralho[0])) ? k = 0 : k = 1;
 
-            cout << "\nJogador " << i + 1 << " escolhe ";
+            cout << "\nJogador " << j + 1 << " escolhe ";
             switch (opcao)
             {
             case 1:
@@ -64,14 +67,20 @@ int main()
                 trocarPosicao(player[j]);
                 break;
             }
-            mostraBaralho(player[0]);
+            mostraBaralho(player[j]);
+            cout << "\n-------------------------------------\n";
 
         }
     }
 
     // verificar ganhador
     ganhador(player[0], player[1]);
-
+    cout << "\nJogador 1 - ";
+    mostraBaralho(player[0]);
+    cout << "\nJogador 2 - ";
+    mostraBaralho(player[1]);
+    cout << "\n-------------------------------------------\n";
+    
     for (int i = 0; i < 2; i++)
     {
         destroi(player[i]);

@@ -79,6 +79,7 @@ void comprarCarta(Lista<T> &player, Lista<T> &baralho)
     do
     {
         cout << "\nPosicao deve ser de 1 à " << numeroDeElementos(player) + 1;
+        cout << "\nopcao:";
         cin >> baralhoPos;
     } while (baralhoPos < 1 || baralhoPos > numeroDeElementos(player) + 1);
 
@@ -94,6 +95,7 @@ void descartarCarta(Lista<T> &player)
     do
     {
         cout << "\nPosicao a ser excluida deve ser uma de 1 à " << player.cardinalidade;
+        cout << "\nposicao:";
         cin >> cartaPos;
 
     } while (!existePosicao(player, cartaPos));
@@ -152,7 +154,7 @@ int retornaSeqCrescente(Lista<T> &player)
 
     while (atual->proximo)
     {
-        if ((atual->valor + 1) == atual->proximo->valor)
+        if (atual->valor < atual->proximo->valor)
         {
             seqAtual++;
 
